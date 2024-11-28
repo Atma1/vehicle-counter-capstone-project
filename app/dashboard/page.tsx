@@ -6,9 +6,10 @@ import { LineChart } from '@/components/line-chart'
 export default function Dashboard() {
   const [videoUrl, setVideoUrl] = useState('')
   const [vehicleStats, setVehicleStats] = useState({
-    cars: 0,
-    motorcycles: 0,
-    trucks: 0
+    car: 0,
+    motorcycle: 0,
+    truck: 0,
+    Bus: 0
   })
 
   return (
@@ -35,18 +36,22 @@ export default function Dashboard() {
             <h2 className="text-2xl font-bold mb-4">Stats</h2>
             <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
               <h3 className="text-lg font-semibold mb-4">Vehicle Count</h3>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <div className="text-2xl font-bold">{vehicleStats.cars}</div>
-                  <div className="text-gray-600">Cars</div>
+                  <div className="text-2xl font-bold">{vehicleStats.car}</div>
+                  <div className="text-gray-600">Car</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold">{vehicleStats.motorcycles}</div>
-                  <div className="text-gray-600">Motorcycles</div>
+                  <div className="text-2xl font-bold">{vehicleStats.motorcycle}</div>
+                  <div className="text-gray-600">Motorbike</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold">{vehicleStats.trucks}</div>
-                  <div className="text-gray-600">Trucks</div>
+                  <div className="text-2xl font-bold">{vehicleStats.truck}</div>
+                  <div className="text-gray-600">Truck</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">{vehicleStats.Bus}</div>
+                  <div className="text-gray-600">Bus</div>
                 </div>
               </div>
             </div>
