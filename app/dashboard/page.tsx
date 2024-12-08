@@ -126,12 +126,12 @@ export default function Dashboard() {
         <div className="grid lg:grid-cols-2 gap-8">
           <div className="bg-gray-100 aspect-video rounded-lg flex items-center justify-center">
             <p className='text-gray-400'>No Feed</p>
-            {/* <Image
+            <Image
               src="/api/video-feed"
               alt="Video Feed"
               layout="fill"
               className="w-full h-full rounded-lg"
-            /> */}
+            />
           </div>
 
 
