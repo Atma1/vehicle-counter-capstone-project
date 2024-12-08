@@ -15,7 +15,7 @@ export default function Navbar() {
         <Link href="/about" className="hover:text-primary">
           About Us
         </Link>
-        <Link href="/html/detect" className="hover:text-primary">
+        <Link href="/detections" className="hover:text-primary">
           Detect
         </Link>
         <Link
