@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import { Tracker } from '@/lib/tracking';
 import { triggerLine, updateCounter } from '@/lib/utils';
+import Feed from "@/components/Feed";
 // import io from 'socket.io-client';
 
 const classNames = {
@@ -19,15 +20,20 @@ const linePoint1 = [140, 220];
 const linePoint2 = [410, 400];
 const offset = 12;
 const counter = { "car": 0, "truck": 0, "motorbike": 0, "bus": 0 };
-// const graphUpdate = { "timestamps": [], "car": [], "truck": [], "motorbike": [], "bus": [] };
-
 
 const YOLODetection = () => {
-    const detectedId = [];
     const tracker = new Tracker();
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [model, setModel] = useState();
+    const [vehicleStats, setVehicleStats] = useState({
+        car: 0,
+        motorbike: 0,
+        truck: 0,
+        bus: 0,
+    });
+
+    const detectedId = [];
 
 
     useEffect(() => {
@@ -138,8 +144,13 @@ const YOLODetection = () => {
         detections.forEach(([topLeftX, topLeftY, width, height, id, label]) => {
             if (triggerLine([topLeftX, topLeftY, width, height], linePoint1, linePoint2, offset)) {
                 if (!detectedId.includes(id)) {
-                    detectedId.push(id);
                     updateCounter(label, counter);
+                    setVehicleStats(counter);
+                    // const updatedGraphData = updateGraphData(counter, graphUpdate);
+                    // console.log(counter, updatedGraphData);
+                    // detectedId.push(id);
+                    // setVehicleStats(counter);
+                    // setGraphData(updatedGraphData);
                 }
             }
             topLeftX = topLeftX / resizeScale - dx / resizeScale;
@@ -172,14 +183,10 @@ const YOLODetection = () => {
     };
 
     return (
-        <div className='flex flex-col items-center'>
-            <div id="main" className='flex justify-center items-center relative w-[640px] h-[480px] bg-gray-100 aspect-video rounded-md'>
-                <p className='text-gray-400'>No Feed</p>
-                <video ref={videoRef} id="webcam" autoPlay playsInline width="640" height="480" className='absolute w-full h-full'></video>
-                <canvas ref={canvasRef} id="outputCanvas" className='absolute w-full h-full z-20'></canvas>
-            </div>
-            <button onClick={handleRunInference} disabled={!model} className='cursor-pointer text-lg px-4 py-2 text-white bg-[#362222] rounded-md hover:bg-[#362222]/90 mt-10'>Run Inference</button>
-        </div>
+        <>
+            <h1>{vehicleStats.motorbike}</h1>
+            <Feed videoRef={videoRef} canvasRef={canvasRef} handleRunInference={handleRunInference} />
+        </>
     );
 };
 
