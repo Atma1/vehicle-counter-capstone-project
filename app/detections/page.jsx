@@ -3,8 +3,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import { Tracker } from '@/lib/tracking';
-import { triggerLine, updateCounter } from '@/lib/utils';
-// import io from 'socket.io-client';
+import { triggerLine } from '@/lib/utils';
+import Feed from "@/components/Feed";
+import VehicleGraphs from '@/components/VehicleGraphs';
 
 const classNames = {
     0: "bus",
@@ -18,16 +19,28 @@ const TARGET_HEIGHT = 640;
 const linePoint1 = [140, 220];
 const linePoint2 = [410, 400];
 const offset = 12;
-const counter = { "car": 0, "truck": 0, "motorbike": 0, "bus": 0 };
-// const graphUpdate = { "timestamps": [], "car": [], "truck": [], "motorbike": [], "bus": [] };
-
 
 const YOLODetection = () => {
-    const detectedId = [];
     const tracker = new Tracker();
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [model, setModel] = useState();
+    const [vehicleStats, setVehicleStats] = useState({
+        car: 0,
+        motorbike: 0,
+        truck: 0,
+        bus: 0,
+    });
+
+    const updateVehicleStats = (vehicleType) => {
+        setVehicleStats(prevStats => ({
+            ...prevStats,
+            [vehicleType]: prevStats[vehicleType] + 1,
+        }));
+    };
+
+    const detectedId = [];
+
 
     useEffect(() => {
         if (model) return;
@@ -138,7 +151,7 @@ const YOLODetection = () => {
             if (triggerLine([topLeftX, topLeftY, width, height], linePoint1, linePoint2, offset)) {
                 if (!detectedId.includes(id)) {
                     detectedId.push(id);
-                    updateCounter(label, counter);
+                    updateVehicleStats(label);
                 }
             }
             topLeftX = topLeftX / resizeScale - dx / resizeScale;
@@ -171,16 +184,12 @@ const YOLODetection = () => {
     };
 
     return (
-        <div>
-            <div id="header" className='absolute z-20 top-0 w-full text-center'>
-                <h1>YOLO Vehicle Detection</h1>
-            </div>
-            <div id="main" className='relative w-[640px] h-[480px]'>
-                <video ref={videoRef} id="webcam" autoPlay playsInline width="640" height="480" className='absolute top-36 left-0 w-full h-full border-2 border-solid border-black'></video>
-                <canvas ref={canvasRef} id="outputCanvas" className='absolute top-36 left-0 w-full h-full z-20'></canvas>
-            </div>
-            <div id="nav-container" className='flex items-center'>
-                <button onClick={handleRunInference} disabled={!model} className='cursor-pointer absolute top-[95%] left-1/2 text-lg px-4 py-2 text-white bg-[#362222] rounded-md hover:bg-[#362222]/90'>Run Inference</button>
+        <div className="p-8">
+            <div className="max-w-6xl mx-auto mt-32">
+                <div className="grid lg:grid-cols-2 gap-52 grid-rows-2">
+                    <Feed videoRef={videoRef} canvasRef={canvasRef} handleRunInference={handleRunInference} />
+                    <VehicleGraphs vehicleStats={vehicleStats} />
+                </div>
             </div>
         </div>
     );
