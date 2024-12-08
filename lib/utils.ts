@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { GraphData, VehicleStats } from "@/app/dashboard/page"
+import { GraphData, VehicleStats } from "@/components/VehicleGraphs"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -23,9 +23,7 @@ export function triggerLine(xywh: number[], linePoint1: number[], linePoint2: nu
 }
 
 export function updateCounter(cls: string, counter: VehicleStats) {
-  if (cls in counter) {
-    counter[cls as keyof VehicleStats]++;
-  }
+  return { ...counter, [cls]: counter[cls as keyof VehicleStats] + 1 }
 }
 
 export function updateGraphData(counter: VehicleStats, graphUpdate: GraphData) {
@@ -36,12 +34,10 @@ export function updateGraphData(counter: VehicleStats, graphUpdate: GraphData) {
   graphUpdate.motorbike.push(counter.motorbike);
   graphUpdate.bus.push(counter.bus);
 
-  if (graphUpdate.timestamps.length > 24) {
+  if (graphUpdate.timestamps.length > 12) {
     for (const key in graphUpdate) {
       (graphUpdate[key as keyof GraphData] as number[]).shift();
     }
   }
-
-  return updateGraphData;
 }
 
