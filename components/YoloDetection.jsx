@@ -21,19 +21,16 @@ const offset = 12;
 const counter = { "car": 0, "truck": 0, "motorbike": 0, "bus": 0 };
 
 const YOLODetection = () => {
-    const tracker = new Tracker();
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [model, setModel] = useState();
+    const [startDetection, setStartDetection] = useState(false);
     const [vehicleStats, setVehicleStats] = useState({
         car: 0,
         motorbike: 0,
         truck: 0,
         bus: 0,
     });
-
-    const detectedId = [];
-
 
     useEffect(() => {
         if (model) return;
@@ -55,22 +52,80 @@ const YOLODetection = () => {
         });
     }, [model]);
 
-    const runModel = async (tensor) => {
-        return model.predict(tensor);
-    };
+    useEffect(() => {
+        const tracker = new Tracker();
+        const detectedId = [];
 
-    const processWebcamFrame = async () => {
-        const video = videoRef.current;
-        const tensor = await webcamToTensor(video);
-        const startTime = performance.now();
-        const predictions = await runModel(tensor);
-        const endTime = performance.now();
-        const inferenceTime = endTime - startTime;
-        console.log(`Inference Time: ${inferenceTime.toFixed(2)} ms`);
-        const detections = processPredictions(predictions, classNames);
-        const trackedBbox = tracker.update(detections);
-        await drawBoundingBoxes(video, trackedBbox);
-    };
+        const runModel = async (tensor) => {
+            if (!model) return;
+            return model.predict(tensor);
+        };
+
+        const processPredictions = (predictions, classNames) => {
+            return tf.tidy(() => {
+                const transRes = predictions.transpose([0, 2, 1]);
+                const boxes = calculateBoundingBoxes(transRes);
+                const [scores, labels] = calculateScoresAndLabels(transRes, classNames);
+
+                const indices = tf.image.nonMaxSuppression(boxes, scores, predictions.shape[2], 0.45, 0.8).arraySync();
+                return extractSelectedPredictions(indices, boxes, labels, classNames);
+            });
+        };
+
+        const drawBoundingBoxes = async (imageElement, detections) => {
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            canvas.width = imageElement.width;
+            canvas.height = imageElement.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const resizeScale = Math.min(TARGET_WIDTH / canvas.width, TARGET_HEIGHT / canvas.height);
+            const dx = (TARGET_WIDTH - canvas.width * resizeScale) / 2;
+            const dy = (TARGET_HEIGHT - canvas.height * resizeScale) / 2;
+
+            ctx.strokeStyle = 'blue';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(linePoint1[0], linePoint1[1]);
+            ctx.lineTo(linePoint2[0], linePoint2[1]);
+            ctx.stroke();
+
+            detections.forEach(([topLeftX, topLeftY, width, height, id, label]) => {
+                if (triggerLine([topLeftX, topLeftY, width, height], linePoint1, linePoint2, offset)) {
+                    if (!detectedId.includes(id)) {
+                        updateCounter(label, counter);
+                        setVehicleStats(counter);
+                    }
+                }
+                topLeftX = topLeftX / resizeScale - dx / resizeScale;
+                topLeftY = topLeftY / resizeScale - dy / resizeScale;
+                width /= resizeScale;
+                height /= resizeScale;
+
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(topLeftX, topLeftY, width, height);
+                ctx.fillStyle = 'red';
+                ctx.font = '20px Arial';
+                ctx.fillText(`#${id} ${label}`, topLeftX, topLeftY - 7);
+            });
+        };
+
+        const processWebcamFrame = async () => {
+            const video = videoRef.current;
+            const tensor = await webcamToTensor(video);
+            const startTime = performance.now();
+            const predictions = await runModel(tensor);
+            const endTime = performance.now();
+            const inferenceTime = endTime - startTime;
+            console.log(`Inference Time: ${inferenceTime.toFixed(2)} ms`);
+            const detections = processPredictions(predictions, classNames);
+            const trackedBbox = tracker.update(detections);
+            await drawBoundingBoxes(video, trackedBbox);
+        };
+        const intervalId = setInterval(processWebcamFrame, 500);
+        return () => clearInterval(intervalId);
+    }, [model, startDetection])
 
     const webcamToTensor = async (videoElement) => {
         const canvas = document.createElement('canvas');
@@ -83,17 +138,6 @@ const YOLODetection = () => {
         const tensor = tf.browser.fromPixels(imageData);
 
         return tf.cast(tensor, 'float32').div(tf.scalar(255)).expandDims(0);
-    };
-
-    const processPredictions = (predictions, classNames) => {
-        return tf.tidy(() => {
-            const transRes = predictions.transpose([0, 2, 1]);
-            const boxes = calculateBoundingBoxes(transRes);
-            const [scores, labels] = calculateScoresAndLabels(transRes, classNames);
-
-            const indices = tf.image.nonMaxSuppression(boxes, scores, predictions.shape[2], 0.45, 0.8).arraySync();
-            return extractSelectedPredictions(indices, boxes, labels, classNames);
-        });
     };
 
     const calculateBoundingBoxes = (transRes) => {
@@ -122,45 +166,6 @@ const YOLODetection = () => {
         });
     };
 
-    const drawBoundingBoxes = async (imageElement, detections) => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
-        canvas.width = imageElement.width;
-        canvas.height = imageElement.height;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        const resizeScale = Math.min(TARGET_WIDTH / canvas.width, TARGET_HEIGHT / canvas.height);
-        const dx = (TARGET_WIDTH - canvas.width * resizeScale) / 2;
-        const dy = (TARGET_HEIGHT - canvas.height * resizeScale) / 2;
-
-        ctx.strokeStyle = 'blue';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(linePoint1[0], linePoint1[1]);
-        ctx.lineTo(linePoint2[0], linePoint2[1]);
-        ctx.stroke();
-
-        detections.forEach(([topLeftX, topLeftY, width, height, id, label]) => {
-            if (triggerLine([topLeftX, topLeftY, width, height], linePoint1, linePoint2, offset)) {
-                if (!detectedId.includes(id)) {
-                    updateCounter(label, counter);
-                    setVehicleStats(counter);
-                }
-            }
-            topLeftX = topLeftX / resizeScale - dx / resizeScale;
-            topLeftY = topLeftY / resizeScale - dy / resizeScale;
-            width /= resizeScale;
-            height /= resizeScale;
-
-            ctx.strokeStyle = 'red';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(topLeftX, topLeftY, width, height);
-            ctx.fillStyle = 'red';
-            ctx.font = '20px Arial';
-            ctx.fillText(`#${id} ${label}`, topLeftX, topLeftY - 7);
-        });
-    };
-
     const setupWebcam = async () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             const video = videoRef.current;
@@ -173,7 +178,7 @@ const YOLODetection = () => {
 
     const handleRunInference = async () => {
         await setupWebcam();
-        setInterval(processWebcamFrame, 100);
+        setStartDetection(true);
     };
 
     return (
