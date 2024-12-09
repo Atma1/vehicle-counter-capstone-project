@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react';
+import insertVehicle from '@/action/insertVehicle';
 import * as tf from '@tensorflow/tfjs';
 import { Tracker } from '@/lib/tracking';
 import { triggerLine } from '@/lib/utils';
@@ -135,36 +136,36 @@ const YOLODetection = () => {
         canvas.width = imageElement.width;
         canvas.height = imageElement.height;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
         const resizeScale = Math.min(TARGET_WIDTH / canvas.width, TARGET_HEIGHT / canvas.height);
         const dx = (TARGET_WIDTH - canvas.width * resizeScale) / 2;
         const dy = (TARGET_HEIGHT - canvas.height * resizeScale) / 2;
-    
+
         ctx.strokeStyle = 'blue';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(linePoint1[0], linePoint1[1]);
         ctx.lineTo(linePoint2[0], linePoint2[1]);
         ctx.stroke();
-    
+
         for (const [topLeftX, topLeftY, width, height, id, label] of detections) {
             if (triggerLine([topLeftX, topLeftY, width, height], linePoint1, linePoint2, offset)) {
                 if (!detectedId.includes(id)) {
                     detectedId.push(id);
                     updateVehicleStats(label);
-    
+
                     const detectionTime = new Date().toISOString();
                     const location = "Gelora"; // Replace with dynamic location if available
                     await insertVehicle(label, detectionTime, location); // Ensure `insertVehicle` is async
                 }
             }
-    
+
             // Adjust dimensions
             const adjustedX = topLeftX / resizeScale - dx / resizeScale;
             const adjustedY = topLeftY / resizeScale - dy / resizeScale;
             const adjustedWidth = width / resizeScale;
             const adjustedHeight = height / resizeScale;
-    
+
             // Draw bounding box
             ctx.strokeStyle = 'red';
             ctx.lineWidth = 2;
@@ -185,17 +186,9 @@ const YOLODetection = () => {
         }
     };
 
-    const insertVehicle = async (vehicleClass, detectionTime, location) => {
-        await fetch('/api/insertVehicle', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ class: vehicleClass, detection_time: detectionTime, location }),
-        });
-    };
-    
-    
+
+
+
     const updateCounts = async (timestamp, location, stats) => {
         await fetch('/api/updateCounts', {
             method: 'POST',
