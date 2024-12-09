@@ -135,37 +135,44 @@ const YOLODetection = () => {
         canvas.width = imageElement.width;
         canvas.height = imageElement.height;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    
         const resizeScale = Math.min(TARGET_WIDTH / canvas.width, TARGET_HEIGHT / canvas.height);
         const dx = (TARGET_WIDTH - canvas.width * resizeScale) / 2;
         const dy = (TARGET_HEIGHT - canvas.height * resizeScale) / 2;
-
+    
         ctx.strokeStyle = 'blue';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(linePoint1[0], linePoint1[1]);
         ctx.lineTo(linePoint2[0], linePoint2[1]);
         ctx.stroke();
-
-        detections.forEach(([topLeftX, topLeftY, width, height, id, label]) => {
+    
+        for (const [topLeftX, topLeftY, width, height, id, label] of detections) {
             if (triggerLine([topLeftX, topLeftY, width, height], linePoint1, linePoint2, offset)) {
                 if (!detectedId.includes(id)) {
                     detectedId.push(id);
                     updateVehicleStats(label);
+    
+                    const detectionTime = new Date().toISOString();
+                    const location = "Gelora"; // Replace with dynamic location if available
+                    await insertVehicle(label, detectionTime, location); // Ensure `insertVehicle` is async
                 }
             }
-            topLeftX = topLeftX / resizeScale - dx / resizeScale;
-            topLeftY = topLeftY / resizeScale - dy / resizeScale;
-            width /= resizeScale;
-            height /= resizeScale;
-
+    
+            // Adjust dimensions
+            const adjustedX = topLeftX / resizeScale - dx / resizeScale;
+            const adjustedY = topLeftY / resizeScale - dy / resizeScale;
+            const adjustedWidth = width / resizeScale;
+            const adjustedHeight = height / resizeScale;
+    
+            // Draw bounding box
             ctx.strokeStyle = 'red';
             ctx.lineWidth = 2;
-            ctx.strokeRect(topLeftX, topLeftY, width, height);
+            ctx.strokeRect(adjustedX, adjustedY, adjustedWidth, adjustedHeight);
             ctx.fillStyle = 'red';
             ctx.font = '20px Arial';
-            ctx.fillText(`#${id} ${label}`, topLeftX, topLeftY - 7);
-        });
+            ctx.fillText(`#${id} ${label}`, adjustedX, adjustedY - 7);
+        }
     };
 
     const setupWebcam = async () => {
@@ -176,6 +183,27 @@ const YOLODetection = () => {
         } else {
             console.error('getUserMedia is not supported');
         }
+    };
+
+    const insertVehicle = async (vehicleClass, detectionTime, location) => {
+        await fetch('/api/insertVehicle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ class: vehicleClass, detection_time: detectionTime, location }),
+        });
+    };
+    
+    
+    const updateCounts = async (timestamp, location, stats) => {
+        await fetch('/api/updateCounts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ timestamp, location, stats }),
+        });
     };
 
     const handleRunInference = async () => {
