@@ -5,7 +5,6 @@ import * as tf from '@tensorflow/tfjs';
 import { Tracker } from '@/lib/tracking';
 import { triggerLine, updateCounter } from '@/lib/utils';
 import Feed from "@/components/Feed";
-// import io from 'socket.io-client';
 
 const classNames = {
     0: "bus",
@@ -146,11 +145,6 @@ const YOLODetection = () => {
                 if (!detectedId.includes(id)) {
                     updateCounter(label, counter);
                     setVehicleStats(counter);
-                    // const updatedGraphData = updateGraphData(counter, graphUpdate);
-                    // console.log(counter, updatedGraphData);
-                    // detectedId.push(id);
-                    // setVehicleStats(counter);
-                    // setGraphData(updatedGraphData);
                 }
             }
             topLeftX = topLeftX / resizeScale - dx / resizeScale;
