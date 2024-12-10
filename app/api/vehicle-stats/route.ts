@@ -1,7 +1,8 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest } from 'next';
 import pool from '@/lib/db';
+import { NextResponse } from 'next/server';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextApiRequest) {
     if (req.method === 'GET') {
         try {
             const query = `
@@ -12,15 +13,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const [result] = await pool.execute(query);
 
             if (!result) {
-                res.status(404).json({ message: 'No data' });
+                NextResponse.json({ message: 'No data' }, { status: 404 });
             }
 
-            return res.status(200).json({ data: result });
+            return NextResponse.json({ data: result }, { status: 200 });
         } catch (error) {
             console.error('Error getting counts:', error);
-            res.status(500).json({ error: 'Internal server error' });
+            NextResponse.json({ error: 'Internal server error' });
         }
     } else {
-        res.status(405).json({ message: 'Method not allowed' });
+        NextResponse.json({ message: 'Method not allowed' });
     }
 }
