@@ -13,7 +13,7 @@ export async function GET(req: NextApiRequest) {
             const [result] = await pool.execute(query);
 
             if (!result) {
-                NextResponse.json({ message: 'No data' }, { status: 404 });
+                NextResponse.json({ data: [] }, { status: 200 });
             }
 
             return NextResponse.json({ data: result }, { status: 200 });
