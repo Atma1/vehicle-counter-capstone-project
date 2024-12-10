@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react';
-import insertVehicle from '@/action/insertVehicle';
+import insertVehicle from '@/actions/insertVehicle';
 import * as tf from '@tensorflow/tfjs';
 import { Tracker } from '@/lib/tracking';
 import { triggerLine } from '@/lib/utils';
