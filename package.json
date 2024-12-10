@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",
+    "axios": "^1.7.9",
     "chart.js": "^4.4.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
