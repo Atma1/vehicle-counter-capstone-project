@@ -102,7 +102,7 @@ const YOLODetection = () => {
                 if (triggerLine([topLeftX, topLeftY, width, height], linePoint1, linePoint2, offset)) {
                     if (!detectedId.includes(id)) {
                         detectedId.push(id);
-                        updateVehicleStats(label);;
+                        updateVehicleStats(label);
                     }
                 }
                 topLeftX = topLeftX / resizeScale - dx / resizeScale;
