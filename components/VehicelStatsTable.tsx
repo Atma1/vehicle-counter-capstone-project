@@ -1,4 +1,4 @@
-import { VehicleStatsResponse } from "@/app/history/page"
+import { VehicleStatsResponse } from "@/app/dashboard/page"
 import {
     Table,
     TableBody,
