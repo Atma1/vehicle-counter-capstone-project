@@ -1,7 +1,8 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest } from 'next';
 import pool from '@/lib/db';
+import { NextResponse } from 'next/server';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest) {
     if (req.method === 'POST') {
         const { timestamp, location, car_count, motorbike_count, truck_count, bus_count } = req.body;
 
@@ -18,12 +19,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const values = [timestamp, location, car_count, motorbike_count, truck_count, bus_count];
             const [result] = await pool.execute(query, values);
 
-            res.status(200).json({ message: 'Counts updated successfully', result });
+            NextResponse.json({ message: 'Counts updated successfully', result }, { status: 201 });
         } catch (error) {
             console.error('Error updating counts:', error);
-            res.status(500).json({ error: 'Internal server error' });
+            NextResponse.json({ error: 'Internal server error' }, { status: 500 });
         }
     } else {
-        res.status(405).json({ message: 'Method not allowed' });
+        NextResponse.json({ message: 'Method not allowed' }, { status: 403 });
     }
 }
