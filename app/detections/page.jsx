@@ -62,6 +62,8 @@ const YOLODetection = () => {
     useEffect(() => {
         if (!model) return;
 
+        if (startDetection == false) return;
+
         const tracker = new Tracker();
         const detectedId = [];
 
