@@ -1,13 +1,11 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react';
-import updateCount from '@/actions/updateCount';
 import * as tf from '@tensorflow/tfjs';
 import { Tracker } from '@/lib/tracking';
 import { triggerLine } from '@/lib/utils';
 import Feed from "@/components/Feed";
 import VehicleGraphs from '@/components/VehicleGraphs';
-import { useApiPolling } from '@/lib/hooks/useApiPooling';
 
 const classNames = {
     0: "bus",
@@ -41,9 +39,6 @@ const YOLODetection = () => {
         }));
     };
 
-    const response = useApiPolling(updateCount(vehicleStats), 1000);
-
-    console.log(response);
 
     useEffect(() => {
         tf.ready().then(async () => {
