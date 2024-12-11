@@ -7,6 +7,14 @@ interface VehicleStats {
 
 export default async function updateCount(vehicleStats: VehicleStats, location: string) {
 
+    function allValuesAreZero(stats: VehicleStats): boolean {
+        return Object.values(stats).every(value => value === 0);
+    }
+
+    if (allValuesAreZero(vehicleStats)) {
+        return;
+    }
+
     const { car, motorbike, truck, bus } = vehicleStats;
 
     await fetch('/api/updateCount', {
