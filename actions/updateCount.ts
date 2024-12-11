@@ -6,7 +6,7 @@ interface VehicleStats {
 }
 
 export default async function updateCount(vehicleStats: VehicleStats, location: string) {
-    const timestamp = new Date().toLocaleString();
+
     const { car, motorbike, truck, bus } = vehicleStats;
 
     await fetch('/api/updateCount', {
@@ -16,7 +16,6 @@ export default async function updateCount(vehicleStats: VehicleStats, location: 
         },
         body: JSON.stringify({
             location: location,
-            timestamp: timestamp,
             car_count: car,
             motorbike_count: motorbike,
             truck_count: truck,
