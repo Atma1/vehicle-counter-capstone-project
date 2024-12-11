@@ -10,7 +10,7 @@ import {
     Legend,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
-
+import updateCount from "@/actions/updateCount";
 export interface VehicleStats {
     car: number,
     motorbike: number,
@@ -29,6 +29,14 @@ export interface GraphData {
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function VehicleGraphs({ vehicleStats }: { vehicleStats: VehicleStats }) {
+
+    useEffect(() => {
+        const interval = setInterval(() => updateCount(vehicleStats, 'Gelora'), 5000)
+        return () => {
+            clearInterval(interval)
+        }
+    }, [vehicleStats]);
+
 
     const [graphData, setGraphData] = useState<GraphData>({
         timestamps: [],
