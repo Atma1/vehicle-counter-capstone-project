@@ -31,7 +31,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 export default function VehicleGraphs({ vehicleStats }: { vehicleStats: VehicleStats }) {
 
     useEffect(() => {
-        const interval = setInterval(() => updateCount(vehicleStats, 'Gelora'), 5000)
+        const interval = setInterval(() => updateCount(vehicleStats, 'Gelora'), 3000)
         return () => {
             clearInterval(interval)
         }
