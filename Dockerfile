@@ -4,6 +4,11 @@ FROM node:18-alpine AS base
 # Set the working directory inside the container
 WORKDIR /app
 
+ENV DB_HOST=$DB_HOST
+ENV DB_NAME=$DB_NAME
+ENV DB_PASSWORD=$DB_PASSWORD
+ENV DB_USER=$DB_USER
+
 # Add a non-root user (recommended for security)
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
