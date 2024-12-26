@@ -1,8 +1,7 @@
-import { NextApiRequest } from 'next';
 import pool from '@/lib/db';
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextRequest) {
     if (req.method === 'GET') {
         try {
             const query = `
