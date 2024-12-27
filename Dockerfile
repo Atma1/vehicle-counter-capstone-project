@@ -12,7 +12,7 @@ ENV DB_PASSWORD=$DB_PASSWORD
 ARG DB_USER
 ENV DB_USER=$DB_USER
 
-RUN echo DB_HOST
+RUN echo $DB_HOST
 
 # Add a non-root user (recommended for security)
 RUN addgroup --system --gid 1001 nodejs
