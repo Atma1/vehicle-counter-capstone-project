@@ -1,0 +1,65 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    entrypoint: 'bash'
+    args:
+      - build
+      - '--no-cache'
+      - '-t'
+      - '--build-arg=$$DB_HOST'
+      - '--build-arg=$$DB_PASSWORD'
+      - '--build-arg=$$DB_NAME'
+      - '--build-arg=$$DB_USER'
+      - >-
+        $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+      - .
+      - '-f'
+      - Dockerfile
+    id: Build
+    secretEnv: ['DB_HOST','DB_NAME' 'DB_PASSWORD','DB_USER']
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - >-
+        $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+    id: Push
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    args:
+      - run
+      - services
+      - update
+      - $_SERVICE_NAME
+      - '--platform=managed'
+      - >-
+        --image=$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+      - >-
+        --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID
+      - '--region=$_DEPLOY_REGION'
+      - '--quiet'
+    id: Deploy
+    entrypoint: gcloud
+images:
+  - >-
+    $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+options:
+  substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
+substitutions:
+  _DEPLOY_REGION: us-central1
+  _AR_HOSTNAME: us-central1-docker.pkg.dev
+  _TRIGGER_ID: 4e1fadb9-2b02-44db-9681-f45072bd7a67
+  _PLATFORM: managed
+  _SERVICE_NAME: vehicle-counter-capstone-project
+tags:
+  - gcp-cloud-build-deploy-cloud-run
+  - gcp-cloud-build-deploy-cloud-run-managed
+  - vehicle-counter-capstone-project
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/DB_HOST/versions/latest
+      env: DB_HOST
+    - versionName: projects/$PROJECT_ID/secrets/DB_PASSWORD/versions/latest
+      env: DB_PASSWORD
+    - versionName: projects/$PROJECT_ID/secrets/DB_USER/versions/latest
+      env: DB_USER
+    - versionName: projects/$PROJECT_ID/secrets/DB_NAME/versions/latest
+      env: DB_NAME
