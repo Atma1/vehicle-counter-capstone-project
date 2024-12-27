@@ -3,10 +3,13 @@ FROM node:18-alpine AS base
 
 # Set the working directory inside the container
 WORKDIR /app
-
+ARG DB_HOST
 ENV DB_HOST=$DB_HOST
+ARG DB_NAME
 ENV DB_NAME=$DB_NAME
+ARG DB_PASSWORD
 ENV DB_PASSWORD=$DB_PASSWORD
+ARG DB_USER
 ENV DB_USER=$DB_USER
 
 # Add a non-root user (recommended for security)
