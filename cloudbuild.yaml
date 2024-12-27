@@ -15,7 +15,11 @@ steps:
       - '-f'
       - Dockerfile
     id: Build
-    secretEnv: ['DB_HOST','DB_NAME' 'DB_PASSWORD','DB_USER']
+    secretEnv: 
+      - DB_HOST
+      - DB_NAME
+      - DB_PASSWORD
+      - DB_USER
   - name: gcr.io/cloud-builders/docker
     args:
       - push
