@@ -1,6 +1,6 @@
 import getAllVehicleStats from "@/actions/getAllVehiceStats";
 import VehicelStatsTable from "@/components/VehicelStatsTable";
-
+export const dynamic = "force-dynamic";
 export type VehicleStatsResponse = {
     count_id: number,
     timestamp: string,
