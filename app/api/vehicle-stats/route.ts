@@ -1,9 +1,10 @@
-import pool from '@/lib/db';
+import createDBConnection from '@/lib/db';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
     if (req.method === 'GET') {
         try {
+            const pool = createDBConnection();
             const query = `
                 SELECT *
                     FROM counts

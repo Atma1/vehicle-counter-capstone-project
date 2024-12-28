@@ -1,4 +1,4 @@
-import pool from '@/lib/db';
+import createDBConnection from '@/lib/db';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -6,6 +6,8 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
 
         const timestamp = new Date();
+
+        const pool = createDBConnection();
 
         const { location, car_count, motorbike_count, truck_count, bus_count } = body;
 
