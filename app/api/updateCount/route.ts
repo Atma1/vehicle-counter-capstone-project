@@ -1,5 +1,6 @@
 import createDBConnection from '@/lib/db';
 import { NextResponse, NextRequest } from 'next/server';
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
     if (req.method === 'POST') {
