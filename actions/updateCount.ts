@@ -17,7 +17,7 @@ export default async function updateCount(vehicleStats: VehicleStats, location: 
 
     const { car, motorbike, truck, bus } = vehicleStats;
 
-    await fetch('/api/updateCount', {
+    await fetch(`${process.env.BACK_END_URL}/api/updateCount`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
