@@ -30,7 +30,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="flex-1">
+          <div className="flex-1 hidden md:flex">
             <Image src="/assets/main.gif" alt="Traffic Monitoring" layout="responsive" width={640} height={360} className="rounded-lg" />
           </div>
         </div>
