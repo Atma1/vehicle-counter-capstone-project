@@ -35,7 +35,7 @@ const teamMembers = [
 
 export default function About() {
   return (
-    <div className="py-20 px-4">
+    <div className="py-28 px-4">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-12">About Us</h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
