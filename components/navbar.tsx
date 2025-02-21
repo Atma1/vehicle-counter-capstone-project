@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { Globe, AlignJustify, X } from 'lucide-react'
 import { usePathname } from 'next/navigation';
 import { useViewportSize } from '@mantine/hooks';
+import { login } from '@/actions/auth'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -16,9 +17,7 @@ export default function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   }
   const closeMenuOnMobile = () => {
-    if (isMobile) {
-      setIsMenuOpen(false);
-    }
+    if (isMobile) setIsMenuOpen(false);
   }
   return (
     <nav className="fixed top-0 left-0 w-full flex items-center h-[80px] justify-between p-4 border-b bg-white z-50">
@@ -36,26 +35,25 @@ export default function Navbar() {
           'bg-white flex-col fixed top-[80px] right-0 bottom-0 w-1/2 p-8 transform transition-transform duration-300 ease-in-out translate-x-full'
         )}>
         <Link href="/"
-          className={pathname == "/" ? 'font-extrabold' : `hover:text-primary`}
+          className={pathname == "/" ? 'font-extrabold' : `hover:text-black text-gray-500`}
           onClick={closeMenuOnMobile}>
           Home
         </Link>
         <Link href="/about"
-          className={pathname == "/about" ? 'font-extrabold' : `hover:text-gray-700`}
+          className={pathname == "/about" ? 'font-extrabold' : `hover:text-black text-gray-500`}
           onClick={closeMenuOnMobile}>
           About Us
         </Link>
         <Link href="/detections"
-          className={pathname == "/detections" ? 'font-extrabold' : `hover:text-gray-700`}
+          className={pathname == "/detections" ? 'font-extrabold' : `hover:text-black text-gray-500`}
           onClick={closeMenuOnMobile}>
           Detect
         </Link>
-        <Link
-          href="/dashboard"
+        <button
           className="px-4 py-2 text-white bg-[#362222] rounded-md hover:bg-[#362222]/90"
-          onClick={closeMenuOnMobile}>
+          onClick={() => login()}>
           Dashboard
-        </Link>
+        </button>
       </div>
       <div className="md:hidden">
         <button className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700" onClick={toggleMenu}>
