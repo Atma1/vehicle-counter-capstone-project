@@ -1,28 +1,25 @@
 import getAllVehicleStats from "@/actions/getAllVehiceStats";
 import VehicelStatsTable from "@/components/VehicelStatsTable";
+import { auth } from "@/app/auth";
+import { VehicleStatsResponse } from "@/actions/getAllVehiceStats";
+import { login } from "@/actions/auth";
 export const dynamic = "force-dynamic";
-export type VehicleStatsResponse = {
-    count_id: number,
-    timestamp: string,
-    location: string,
-    car_count: number,
-    motorbike_count: number,
-    truck_count: number,
-    bus_count: number
-}
-
 
 export default async function History() {
 
-    const res = await getAllVehicleStats() as VehicleStatsResponse[] || [];
+    const session = await auth();
+
+    if (!session) await login();
+
+    const res: VehicleStatsResponse[] = await getAllVehicleStats();
 
     if (res.length == 0) {
-        return <h1>No data</h1>
+        return <h1 className="py-24 px-4 text-4xl font-bold text-center mb-12">No data</h1>
     } else {
         return (
             <div className="py-24 px-4">
                 <div className="max-w-6xl mx-auto">
-                    <h1 className="text-4xl font-bold text-center mb-12-">History</h1>
+                    <h1 className="text-4xl font-bold text-center mb-12">History</h1>
                     <VehicelStatsTable data={res} />
                 </div>
             </div>
