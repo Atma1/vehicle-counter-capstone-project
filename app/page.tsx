@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="pt-20">
       {/* Hero Section */}
-      <section className="py-20 px-4 overflow-hidden">
+      <section className="py-20 px-4 overflow-hidden h-[77vh]">
         <div className="max-w-6xl mx-auto flex items-center gap-12">
           <div className="flex-1">
             <h1 className="text-5xl font-bold mb-4">
@@ -39,7 +39,7 @@ export default function Home() {
       {/* Features Section */}
       <section className="py-20 px-4 bg-gray-100">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">Key Features</h2>
+          <h2 className="text-5xl font-bold text-center mb-12">Key Features</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg">
               <Car className="w-12 h-12 mb-4" />
