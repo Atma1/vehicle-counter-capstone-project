@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils'
 import { Globe, AlignJustify, X } from 'lucide-react'
 import { usePathname } from 'next/navigation';
 import { useViewportSize } from '@mantine/hooks';
-import { login } from '@/actions/auth'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -49,11 +48,11 @@ export default function Navbar() {
           onClick={closeMenuOnMobile}>
           Detect
         </Link>
-        <button
+        <Link href="/dashboard"
           className="px-4 py-2 text-white bg-[#362222] rounded-md hover:bg-[#362222]/90"
-          onClick={() => login()}>
+          onClick={closeMenuOnMobile}>
           Dashboard
-        </button>
+        </Link>
       </div>
       <div className="md:hidden">
         <button className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700" onClick={toggleMenu}>
