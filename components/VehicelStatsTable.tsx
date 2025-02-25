@@ -1,19 +1,15 @@
-import { VehicleStatsResponse } from "@/app/dashboard/page"
 import {
     Table,
     TableBody,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import VehicleStatsTableBody from "./VehicleStatsTableBody"
+import { Suspense } from "react"
+import TableBodySkeleton from "./TableBodySkeleton"
 
-const convertDate = (date: string) => {
-    const dateClass = new Date(date);
-    return dateClass.toLocaleString();
-}
-
-export default function VehicelStatsTable({ data }: { data: VehicleStatsResponse[] }) {
+export default function VehicelStatsTable() {
     return (
         <Table className="mt-8">
             <TableHeader>
@@ -27,16 +23,9 @@ export default function VehicelStatsTable({ data }: { data: VehicleStatsResponse
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data.map((dataValue) => (
-                    <TableRow key={dataValue.count_id}>
-                        <TableCell className="font-medium">{dataValue.location}</TableCell>
-                        <TableCell className="font-medium">{dataValue.car_count}</TableCell>
-                        <TableCell className="font-medium">{dataValue.motorbike_count}</TableCell>
-                        <TableCell className="font-medium">{dataValue.truck_count}</TableCell>
-                        <TableCell className="font-medium">{dataValue.bus_count}</TableCell>
-                        <TableCell className="text-right">{convertDate(dataValue.timestamp)}</TableCell>
-                    </TableRow>
-                ))}
+                <Suspense fallback={<TableBodySkeleton />}>
+                    <VehicleStatsTableBody />
+                </Suspense>
             </TableBody>
         </Table>
     )
