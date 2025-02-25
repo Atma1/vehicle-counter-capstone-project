@@ -11,9 +11,7 @@ export default async function updateCount(vehicleStats: VehicleStats, location: 
         return Object.values(stats).every(value => value === 0);
     }
 
-    if (allValuesAreZero(vehicleStats)) {
-        return;
-    }
+    if (allValuesAreZero(vehicleStats)) return;
 
     const { car, motorbike, truck, bus } = vehicleStats;
 
