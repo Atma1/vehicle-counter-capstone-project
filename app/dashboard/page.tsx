@@ -1,20 +1,26 @@
-import VehicelStatsTable from "@/components/VehicelStatsTable";
+import VehicleStatsTable from "@/components/VehicleStatsTable";
 import { auth } from "@/app/auth";
 import { login } from "@/actions/auth";
+import { redirect } from "next/navigation";
+
 export const dynamic = "force-dynamic";
 
-export default async function History() {
-
+export default async function DashboardPage() {
+    // Get authentication session
     const session = await auth();
 
-    if (!session) await login();
+    // Redirect to login if no session exists
+    if (!session) {
+        await login();
+        redirect('/login'); // Add explicit redirect for better flow control
+    }
 
     return (
-        <div className="py-24 px-4">
+        <main className="py-24 px-4">
             <div className="max-w-6xl mx-auto">
-                <h1 className="text-4xl font-bold text-center mb-12">History</h1>
-                <VehicelStatsTable />
+                <h1 className="text-4xl font-bold text-center mb-12">Dashboard</h1>
+                <VehicleStatsTable />
             </div>
-        </div>
-    )
+        </main>
+    );
 }
