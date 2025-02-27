@@ -9,7 +9,7 @@ import VehicleStatsTableBody from "./VehicleStatsTableBody"
 import { Suspense } from "react"
 import TableBodySkeleton from "./TableBodySkeleton"
 
-export default function VehicelStatsTable() {
+export default function VehicleStatsTable() {
     return (
         <Table className="mt-8">
             <TableHeader>
