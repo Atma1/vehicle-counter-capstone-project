@@ -1,20 +1,17 @@
 import { usePathname } from "next/navigation";
 import { AlignJustify, X } from 'lucide-react';
-import { useViewportSize } from "@mantine/hooks";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { Link } from 'nextjs13-progress';
 
 export default function MobileNavbar() {
     const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-    const { width } = useViewportSize();
-    const isMobile = width < 768;
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     }
     const closeMenuOnMobile = () => {
-        if (isMobile) setIsMenuOpen(false);
+        setIsMenuOpen(false);
     }
     return (
         <div className="md:hidden">
@@ -31,7 +28,6 @@ export default function MobileNavbar() {
                     isMenuOpen &&
                     'bg-white fixed top-[80px] right-0 w-[300px] bottom-0 p-8 transform transition-transform duration-300 ease-in-out translate-x-0 border-l',
                     !isMenuOpen &&
-                    isMobile &&
                     'bg-white fixed top-[80px] right-0 w-[300px] bottom-0 p-8 transform transition-transform duration-300 ease-in-out translate-x-full'
                 )}>
                 <Link href="/"
