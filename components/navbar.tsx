@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from 'nextjs13-progress';
 import { Globe } from 'lucide-react'
 import { usePathname } from 'next/navigation';
 import MobileNavbar from './MobileNavbar';
