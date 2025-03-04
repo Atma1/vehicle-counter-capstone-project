@@ -32,7 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/detections/page.jsx",
+    "app/(home)/detections/page.jsx",
     "components/Feed.jsx"
   ],
   "exclude": [
