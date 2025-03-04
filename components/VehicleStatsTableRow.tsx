@@ -6,7 +6,7 @@ const convertDate = (date: string) => {
     return dateClass.toLocaleString();
 }
 
-export default async function VehicleStatsTableBody() {
+export default async function VehicleStatsTableRow() {
     const res: VehicleStatsResponse[] = await getAllVehicleStats();
 
     if (res.length == 0) return " ";
