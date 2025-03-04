@@ -5,7 +5,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import VehicleStatsTableBody from "./VehicleStatsTableBody"
+import VehicleStatsTableRow from "./VehicleStatsTableRow"
 import { Suspense } from "react"
 import TableBodySkeleton from "./TableBodySkeleton"
 
@@ -24,7 +24,7 @@ export default function VehicleStatsTable() {
             </TableHeader>
             <TableBody>
                 <Suspense fallback={<TableBodySkeleton />}>
-                    <VehicleStatsTableBody />
+                    <VehicleStatsTableRow />
                 </Suspense>
             </TableBody>
         </Table>
