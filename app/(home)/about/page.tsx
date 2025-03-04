@@ -17,7 +17,7 @@ const teamMembers = [
     name: "Adyatma Imam Susanto",
     university: "UPN Veteran Jawa Timur - Informatika",
     role: "Machine Learning Cohort",
-    photo: "/assets/tama.png"
+    photo: "/assets/atma.png"
   },
   {
     name: "Mohamad Ifdhal Hassan Noor",

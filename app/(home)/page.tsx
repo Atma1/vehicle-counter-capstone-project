@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="pt-20">
       {/* Hero Section */}
-      <section className="pt-40 px-4 overflow-hidden h-[90vh]">
+      <section className="pt-36 px-4 overflow-hidden h-[90vh]">
         <div className="max-w-6xl mx-auto flex items-center gap-10">
           <div className="flex-1">
             <h1 className="text-5xl md:text-6xl font-bold mb-4">
