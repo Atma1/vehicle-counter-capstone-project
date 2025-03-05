@@ -63,7 +63,7 @@ export default function About() {
           Our goal is to provide actionable traffic insights for smarter urban development.
         </p>
 
-        <div className="flex justify-center space-x-20">
+        <div className="flex justify-between items-center md:space-x-20 md:justify-center">
           <Image src="/assets/tf.png" alt="TensorFlow" width={60} height={60} />
           <Image src="/assets/mysql.png" alt="MySQL" width={60} height={60} />
           <Image src="/assets/ts.png" alt="TypeScript" width={60} height={60} />
