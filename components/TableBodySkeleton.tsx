@@ -4,11 +4,10 @@ import {
 } from "@/components/ui/table"
 import { Skeleton } from "./ui/skeleton";
 
-export default function TableBodySkeleton() {
-    const rowAmmount = 5;
+export default function TableBodySkeleton({ rowAmount }: { rowAmount: number }) {
     let i = 0;
     const rowSkeleton = [];
-    while (i <= rowAmmount) {
+    while (i <= rowAmount) {
         rowSkeleton.push(
             <TableRow key={i}>
                 <TableCell className="font-medium"><Skeleton className="w-full h-[20px] rounded-full" /></TableCell>

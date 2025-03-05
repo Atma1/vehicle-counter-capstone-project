@@ -23,7 +23,7 @@ export default function VehicleStatsTable() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <Suspense fallback={<TableBodySkeleton />}>
+                <Suspense fallback={<TableBodySkeleton rowAmount={4} />}>
                     <VehicleStatsTableRow />
                 </Suspense>
             </TableBody>
