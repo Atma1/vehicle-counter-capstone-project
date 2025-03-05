@@ -28,7 +28,7 @@ export default function Navbar() {
           className={pathname == "/detections" ? 'font-extrabold' : `hover:text-black text-gray-500`}>
           Detect
         </Link>
-        <Link href="/dashboard"
+        <Link href="/login"
           className="px-4 py-2 text-white bg-[#362222] rounded-md hover:bg-[#362222]/90">
           Dashboard
         </Link>
