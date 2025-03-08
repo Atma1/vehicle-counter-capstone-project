@@ -11,7 +11,7 @@ import {
 import Link from "next/link"
 import { Globe } from "lucide-react"
 import { login } from "@/actions/auth"
-import { providerMap } from "@/app/auth"
+import { providerMap } from "@/auth.config"
 
 export function LoginForm({
   className,
