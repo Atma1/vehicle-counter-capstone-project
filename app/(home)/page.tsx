@@ -6,13 +6,13 @@ export default function Home() {
   return (
     <div className="pt-20">
       {/* Hero Section */}
-      <section className="py-20 px-4 overflow-hidden">
-        <div className="max-w-6xl mx-auto flex items-center gap-12">
+      <section className="pt-36 px-4 overflow-hidden h-[90vh]">
+        <div className="max-w-6xl mx-auto flex items-center gap-10">
           <div className="flex-1">
-            <h1 className="text-5xl font-bold mb-4">
+            <h1 className="text-5xl md:text-6xl font-bold mb-4">
               Automated Traffic Monitoring System
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-xl lg:text-2xl text-gray-600 mt-8 mb-8">
               Enhancing Urban Mobility with Deep Learning and Computer Vision
             </p>
             <div className="flex gap-4">
@@ -30,7 +30,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="flex-1">
+          <div className="flex-1 hidden lg:flex">
             <Image src="/assets/main.gif" alt="Traffic Monitoring" layout="responsive" width={640} height={360} className="rounded-lg" />
           </div>
         </div>
@@ -39,7 +39,7 @@ export default function Home() {
       {/* Features Section */}
       <section className="py-20 px-4 bg-gray-100">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">Key Features</h2>
+          <h2 className="text-5xl font-bold text-center mb-12">Key Features</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg">
               <Car className="w-12 h-12 mb-4" />
