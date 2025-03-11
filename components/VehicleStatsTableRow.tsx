@@ -9,7 +9,7 @@ const convertDate = (date: string) => {
 export default async function VehicleStatsTableRow() {
     const res: VehicleStatsResponse[] = await getAllVehicleStats();
 
-    if (res.length == 0) return " ";
+    if (res.length == 0) return "Empty";
 
     return (
         res.map((dataValue) => (
