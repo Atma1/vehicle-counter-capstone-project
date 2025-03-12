@@ -1,4 +1,4 @@
-import createDBConnection from '@/lib/db';
+import db from '@/lib/db';
 import { NextResponse, NextRequest } from 'next/server';
 export const dynamic = "force-dynamic";
 
@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 
         const timestamp = new Date();
 
-        const pool = createDBConnection();
+        const pool = db;
 
         const { location, car_count, motorbike_count, truck_count, bus_count } = body;
 
